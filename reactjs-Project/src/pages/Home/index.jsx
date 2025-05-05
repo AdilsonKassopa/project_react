@@ -22,12 +22,21 @@ function App() {
   }
 
   async function createtUsers(){
-     await api.post("/users",{
-      name: inputName.current.value,
-      age: inputAge.current.value,
-      email: inputEmail.current.value
-     })
-    
+    try {
+      await api.post("/users", {
+        Name: inputName.current.value,
+        Age: Number(inputAge.current.value),
+        Email: inputEmail.current.value,
+      });
+      alert("Usuário cadastrado com sucesso!");
+    } catch (err) {
+      if (err.response && err.response.status === 400) {
+        alert("Erro: " + err.response.data.message);
+      } else {
+        alert("Erro inesperado ao cadastrar usuário.");
+        console.error(err);
+      }
+    }
     getUsers()
   }
 
@@ -43,7 +52,6 @@ function App() {
   
 
   return (
-   
     <div className='container'>
       <form action="">
       <h1>Cadastro de Usuario</h1>
@@ -56,9 +64,9 @@ function App() {
       {users.map(user =>(
         <div className='card' key={user.id}>
           <div>
-            <p>Nome:  <spam>{user.name}</spam></p>
-            <p>Idade:  <spam>{user.age}</spam></p>
-            <p>Emai:  <spam>{user.email}</spam></p>
+            <p>Nome:  <spam>{user.Name}</spam></p>
+            <p>Idade:  <spam>{user.Age}</spam></p>
+            <p>Emai:  <spam>{user.Email}</spam></p>
           </div> 
           <button type="button" onClick={() => deleteUsers(user.id)}><img src={Vite} alt="" /></button>
       </div>
